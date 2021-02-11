@@ -1,0 +1,16 @@
+aux_source_directory(. RISCV_SRC)
+if(DEFINED ENV{BOOST_ROOT_1_72_0})
+    message($ENV{BOOST_ROOT_1_72_0})
+    file(TO_CMAKE_PATH $ENV{BOOST_ROOT_1_72_0} CMAKE_BOOST_ROOT)
+    list(APPEND BOOST_ROOT "$ENV{CMAKE_BOOST_ROOT}")
+    list(APPEND Boost_INCLUDE_DIRS "$ENV{CMAKE_BOOST_ROOT}/boost/include")
+    list(APPEND Boost_LIB_DIRS "$ENV{CMAKE_BOOST_ROOT}/lib")
+endif()
+find_package(Boost REQUIRED)
+message(Boost: ${Boost_VERSION_STRING})
+include_directories(${Boost_INCLUDE_DIRS} )
+add_library(libriscv STATIC ${RISCV_SRC})
+target_link_libraries(libriscv libcommon)
+
+# Specify here the include directories exported by this library
+target_include_directories(libriscv PUBLIC ${CMAKE_SOURCE_DIR})
